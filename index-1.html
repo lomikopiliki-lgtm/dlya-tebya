@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#eee9e2">
+<title>для тебя</title>
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;background:#e9e4dd;color:#252320;font-family:Georgia,"Times New Roman",serif}
+body{min-height:100vh;padding:12px 10px 74px}
+.book{width:min(100%,440px);margin:auto;perspective:1200px}
+.page{display:none;min-height:calc(100vh - 88px);background:#f9f6f0;padding:38px 27px 30px;box-shadow:0 20px 55px rgba(35,29,23,.17),inset 0 0 0 1px rgba(80,65,50,.08);position:relative;overflow:hidden}
+.page.active{display:flex;flex-direction:column;animation:pageIn .55s cubic-bezier(.2,.7,.2,1)}
+@keyframes pageIn{from{opacity:0;transform:translateX(22px) rotateY(-4deg)}to{opacity:1;transform:none}}
+.num{font:10px Arial,sans-serif;letter-spacing:.22em;text-transform:uppercase;color:#948b82;margin-bottom:34px}
+h1{font-size:42px;line-height:1.03;font-weight:400;margin:0 0 14px}
+.sub{font:14px/1.65 Arial,sans-serif;color:#77716a}
+.line{height:1px;background:#d8d0c7;margin:28px 0}
+.photo{width:100%;height:54vh;object-fit:cover;display:block}
+.caption{text-align:center;font-size:13px;color:#857b72;font-style:italic;margin:13px 0 0}
+.poem{font-size:22px;line-height:1.72;margin:auto 0}
+.quote{font-size:31px;line-height:1.35;text-align:center;margin:auto 0}
+.small{display:block;font:10px/1.6 Arial,sans-serif;letter-spacing:.15em;text-transform:uppercase;color:#91877e;margin-top:20px}
+.center{text-align:center;margin:auto}
+.musicBtn{display:inline-flex;align-items:center;justify-content:center;border:1px solid #cfc6bd;background:transparent;border-radius:999px;padding:12px 22px;font:13px Arial,sans-serif;color:#403c37}
+.musicBtn.on{background:#e8e1d8}
+.footer{margin-top:auto;padding-top:28px;text-align:center;font:10px Arial,sans-serif;letter-spacing:.14em;color:#9b9188}
+.controls{position:fixed;left:0;right:0;bottom:12px;text-align:center;z-index:10}
+.controls button{border:1px solid #cec5bb;background:rgba(249,246,240,.97);border-radius:999px;padding:10px 15px;margin:0 3px;color:#403c37;font:12px Arial,sans-serif;box-shadow:0 5px 18px rgba(35,29,23,.12)}
+audio{display:none}
+@media(max-height:700px){.page{min-height:620px}.photo{height:50vh}.poem{font-size:20px}}
+</style>
+</head>
+<body>
+<main class="book">
+
+<section class="page active">
+  <div class="num">01 / для тебя</div>
+  <h1>я хотел оставить тебе<br>кое-что особенное</h1>
+  <div class="sub">маленькая история, которую можно перечитать в любой момент</div>
+  <div class="line"></div>
+  <div class="center">
+    <button class="musicBtn" onclick="startAndNext()">открыть →</button>
+  </div>
+  <div class="footer">для тебя</div>
+</section>
+
+<section class="page">
+  <div class="num">02 / ты</div>
+  <img class="photo" src="photo1.jpg" alt="Фото">
+  <div class="caption">почему-то именно на тебя хочется смотреть дольше</div>
+  <div class="footer">свайпни →</div>
+</section>
+
+<section class="page">
+  <div class="num">03 / ещё одна</div>
+  <img class="photo" src="photo2.jpg" alt="Фото">
+  <div class="caption">эту фотографию тоже хотелось оставить здесь</div>
+  <div class="footer">свайпни →</div>
+</section>
+
+<section class="page">
+  <div class="num">04 / несколько строк</div>
+  <div class="poem">
+    я хочу быть к тебе ближе<br>
+    целоваться с тобой чтоб мой пульс стал чуть тише<br>
+    прожить с тобой до конца своей жизни<br>
+    часто засыпаю чтоб тебя видеть ближе
+  </div>
+  <div class="footer">твои слова</div>
+</section>
+
+<section class="page">
+  <div class="num">05 / музыка</div>
+  <div class="center">
+    <div style="font-size:28px;margin-bottom:12px">Оджи Буда</div>
+    <div class="sub" style="margin-bottom:24px">Строчки о бывших</div>
+    <button id="music" class="musicBtn" onclick="toggleMusic()">▶︎ слушать</button>
+    <div class="sub" style="margin-top:22px">нажми, чтобы включить музыку</div>
+  </div>
+  <div class="footer">♪</div>
+</section>
+
+<section class="page">
+  <div class="num">06 / главное</div>
+  <div class="quote">
+    «только моя и больше не чья»
+    <span class="small">и пусть эта страница останется только нашей</span>
+  </div>
+  <div class="footer">самое главное</div>
+</section>
+
+<section class="page">
+  <div class="num">07 / конец</div>
+  <div class="quote">
+    конец.
+    <span class="small">или только начало?</span>
+  </div>
+  <div class="center" style="margin-top:20px">
+    <button class="musicBtn" onclick="show(0)">перечитать сначала ↻</button>
+  </div>
+  <div class="footer">♡</div>
+</section>
+
+</main>
+
+<audio id="audio" src="song.mp3" loop></audio>
+<div class="controls">
+  <button onclick="prev()">←</button>
+  <button onclick="toggleMusic()">♪ музыка</button>
+  <button onclick="next()">→</button>
+</div>
+
+<script>
+const pages=[...document.querySelectorAll('.page')];
+let i=0;
+const audio=document.getElementById('audio');
+const musicButtons=[...document.querySelectorAll('.musicBtn')];
+
+function show(n){
+  i=(n+pages.length)%pages.length;
+  pages.forEach((p,k)=>p.classList.toggle('active',k===i));
+  scrollTo({top:0,behavior:'smooth'});
+}
+function next(){show(i+1)}
+function prev(){show(i-1)}
+function toggleMusic(){
+  if(audio.paused){audio.play(); musicButtons.forEach(b=>b.classList.add('on'))}
+  else{audio.pause(); musicButtons.forEach(b=>b.classList.remove('on'))}
+}
+function startAndNext(){ if(audio.paused) audio.play().catch(()=>{}); next(); }
+let sx=0;
+document.addEventListener('touchstart',e=>sx=e.changedTouches[0].clientX,{passive:true});
+document.addEventListener('touchend',e=>{
+  const dx=e.changedTouches[0].clientX-sx;
+  if(Math.abs(dx)>55) dx<0?next():prev();
+},{passive:true});
+</script>
+</body>
+</html>
